@@ -1,13 +1,24 @@
 #!/bin/bash
-echo "welCome In Tictactoa Simulator"
+echo "WelCome In Tictactoa Simulator"
 
-function resetBord()
-{
-        j=0
-        for(( i=1; i<=9; i++ ))
+declare -a bord
+#constants
+
+
+        for (( i=1; i<=9; i++ ))
         do
-                bord[$i]=$j
+                bord[$i]=$i 
         done
+
+function displayBord()
+{
+	local i=1
+	for (( j=0; j<3; j++ ))
+	do
+		echo "|---|---|---|"
+		echo "| "${bord[$i]}" | "${bord[$i+1]}" | "${bord[$i+2]}" |"
+		i=$(($i+3))
+	done
 }
 
 function assignLetterXOrO()
@@ -39,10 +50,6 @@ function tossToCheckWhoPlaySFirst()
         fi
 }
 
-
-
-tossToCheckWhoPlaySFirst
 assignLetterXOrO
-resetBord
-
-
+tossToCheckWhoPlaySFirst
+displayBord
