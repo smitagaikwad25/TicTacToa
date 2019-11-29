@@ -31,6 +31,24 @@ function assignLetterXOrO()
 
 }
 
+function tossToCheckWhoPlaySFirst()
+{
+	local player=0
+        local computer=0
+        random=$((RANDOM%2+1))
+        if [ $random -eq 1 ]
+        then
+                echo "player's turn now"
+        else
+                echo "computer's turn now"
+        fi
+
+
+}
+
+
+
+tossToCheckWhoPlaySFirst
 assignLetterXOrO
 resetBord
 
