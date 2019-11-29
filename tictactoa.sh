@@ -8,7 +8,6 @@ function resetBord()
         do
                 bord[$i]=$j
         done
-
 }
 
 function assignLetterXOrO()
@@ -27,14 +26,10 @@ function assignLetterXOrO()
                 echo "player:" $player 
                 echo "computer:" $computer
         fi
-
-
 }
 
 function tossToCheckWhoPlaySFirst()
 {
-	local player=0
-        local computer=0
         random=$((RANDOM%2+1))
         if [ $random -eq 1 ]
         then
@@ -42,8 +37,6 @@ function tossToCheckWhoPlaySFirst()
         else
                 echo "computer's turn now"
         fi
-
-
 }
 
 
