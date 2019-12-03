@@ -1,23 +1,27 @@
-#!/bin/bash
+#! /bin/bash
 echo "WelCome In Tictactoa Simulator"
 
 declare -a board
 #constants
+MAX_CELL_NUM=9
+NULL="-"
 playerSymbol=0
 computerSymbol=0
+counter=0
+
 
 
 function resetBoard()
 {
-	for (( i=1; i<=9; i++ ))
+	for (( index=1; index<=9; index++ ))
 	do
-		board[$i]="$i"
+		board[$index]=$NULL
 	done
 }
 
 function assignLetterXOrO()
 {
-	assign=1
+	local assign=1
 	random=$((RANDOM%2))
 	if [ $assign -eq $random ]
         then
@@ -48,25 +52,27 @@ function tossToCheckWhoPlaySFirst()
 
 function displayBoard()
 {
-        local i=1
+        local index=1
         for (( j=0; j<3; j++ ))
         do
                 echo "|---|---|---|"
-                echo "| "${board[$i]}" | "${board[$i+1]}" | "${board[$i+2]}" |"
-                i=$(($i+3))
+                echo "| "${board[$index]}" | "${board[$index+1]}" | "${board[$index+2]}" |"
+                index=$(($index+3))
         done
 }
 
 function checkForDiagonal()
 {
-	for (( i=1; i<2; i++ ))
+	local symbolToCheck=$1
+
+	for (( diag=1; diag<2; diag++ ))
 	do
-		if [[ ${board[$i]} == ${board[$i+4]} ]] && [[ ${board[$i+4]} == ${board[$i+8]} ]] && [[ ${board[$i+8]} == $playerSymbol ]]
+		if [[ ${board[$diag]} == ${board[$diag+4]} ]] && [[ ${board[$diag+4]} == ${board[$diag+8]} ]] && [[ ${board[$diag+8]} == $symbolToCheck ]]
 		then
 			displayBoard
 			echo "Game Win"
 			exit
-		elif [[ ${board[$i+2]} == ${board[$i+4]} ]] && [[ ${board[$i+4]} == ${board[$i+6]} ]] && [[ ${board[$i+6]} == $playerSymbol ]]
+		elif [[ ${board[$diag+2]} == ${board[$diag+4]} ]] && [[ ${board[$diag+4]} == ${board[$diag+6]} ]] && [[ ${board[$diag+6]} == $symbolToCheck ]]
 		then
 			displayBoard
 			echo "Game Win"
@@ -76,11 +82,11 @@ function checkForDiagonal()
 }
 
 function checkForRow()
-   {
-
-	for (( i=1; i<=9; i=i+3 ))
+{
+	local symbolToCheck=$1
+	for (( row=1; row<=9; row=row+3 ))
 	do
-		if [[ ${board[$i]} == ${board[$i+1]} ]] && [[ ${board[$i+1]} == ${board[$i+2]} ]] && [[ ${board[$i+2]} == $playerSymbol ]]	
+		if [[ ${board[$row]} == ${board[$row+1]} ]] && [[ ${board[$row+1]} == ${board[$row+2]} ]] && [[ ${board[$row+2]} == $symbolToCheck ]]	
 		then
 			displayBoard
 			echo "Game Win"
@@ -92,50 +98,92 @@ function checkForRow()
 
 function checkForCol()
 {
-	for (( i=1; i<=3; i++ ))
+	local symbolToCheck=$1
+	for (( col=1; col<=3; col++ ))
 	do
-		if [[ ${board[$i]} == ${board[$i+3]} ]] && [[ ${board[$i+3]} == ${board[$i+6]} ]] && [[ ${board[$i+6]} == $playerSymbol ]]
+		if [[ ${board[$col]} == ${board[$col+3]} ]] && [[ ${board[$col+3]} == ${board[$col+6]} ]] && [[ ${board[$col+6]} == $symbolToCheck ]]
 		then
 			displayBoard
 			echo "Game win"
 			exit
 		fi
 
-		i=$((i+3))
+		col=$((col+1))
 	done
+}
+
+function checkForTie()
+{
+	local chanceCount=$1
+	if [ $ChanceCount -eq $MAX_CELL_NUM ]
+	then
+		echo "game is tie"
+	fi
 }
 
 function checkForWin()
 {
-checkForDiagonal
-checkForRow
-checkForCol
+	local symbolToCheck=$1
+	local chanceCount=$2
+	checkForRow $symbolToCheck
+	checkForCol $symbolToCheck
+	checkForDiagonal $symbolToCheck
+	checkForTie $chanceCount
 }
 
+function checkForCompMove()
+{
+	local compCounter=1
+	while [ $compCounter -le $MAX_CELL_NUM ]
+	do
+		if [ ${board[$compCounter]} == $NULL ]
+		then
+			board[$compCounter]=$computerSymbol
+			checkForWin $computerSymbol $count
+			board[$compCounter]=$NULL
+		fi
+		((compCounter++))
+	done
+
+
+}
 
 function startPlaying()
 {
+	local count=0
 	local i=1
 	local min=0
-	local max=9
-	while [[ $i -ge $min && $i -le $max ]]
+	while [[ $i -ge $min && $i -le $MAX_CELL_NUM ]]
 	do
 		if [ $chanceOf == "player" ]
 		then
 			displayBoard
-			echo "Enter the cell number to put your symbol"
-			read i
-				if [ ${board[$i]} == "$i" ]
+			echo "Players turn"
+			echo "Select cell to insert your symbol"
+			read cellNum
+				if [ ${board[$cellNum]} == $NULL ]
 				then
-					board[$i]=$playerSymbol
-					checkForWin
+					board[$cellNum]=$playerSymbol
+					checkForWin $playerSymbol $count
+					chanceOf="computer"
 				else
 					echo "check for empty cell"
 				fi
 		else
+			displayBoard
 			echo "computers turn"
-			break
+			checkForCompMove
+			echo "Select cell for computer to insert symbol"
+			read  cellNumComp
+				if [ ${board[$cellNumComp]} == $NULL ]
+				then
+					board[$cellNumComp]=$computerSymbol
+					chanceOf="player"
+				else
+					echo "select empty cell"
+				fi
 		fi
+			((count++))
 	done
 }
 
@@ -145,9 +193,7 @@ function main()
 	resetBoard
 	assignLetterXOrO
 	tossToCheckWhoPlaySFirst
-#	displayBoard
 	startPlaying
-#	checkForWin
 }
 
 main
