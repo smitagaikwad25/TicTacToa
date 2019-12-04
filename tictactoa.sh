@@ -4,10 +4,13 @@ echo "WelCome In Tictactoa Simulator"
 declare -a board
 #constants
 MAX_CELL_NUM=9
+
+#variables
 NULL="-"
 playerSymbol=0
 computerSymbol=0
 counter=0
+flag=false
 
 
 
@@ -114,21 +117,22 @@ function checkForCol()
 
 function checkForTie()
 {
-	local chanceCount=$1
-	if [ $ChanceCount -eq $MAX_CELL_NUM ]
+	local Count=$1
+	if [ $Count -eq $MAX_CELL_NUM ]
 	then
 		echo "game is tie"
+		exit
 	fi
 }
 
 function checkForWin()
 {
 	local symbolToCheck=$1
-	local chanceCount=$2
+	local Count=$2
 	checkForRow $symbolToCheck
 	checkForCol $symbolToCheck
 	checkForDiagonal $symbolToCheck
-	checkForTie $chanceCount
+	checkForTie $Count
 }
 
 function checkForCompMove()
@@ -136,17 +140,101 @@ function checkForCompMove()
 	local compCounter=1
 	while [ $compCounter -le $MAX_CELL_NUM ]
 	do
-		if [ ${board[$compCounter]} == $NULL ]
+ 		if [ ${board[$compCounter]} == $NULL ]
 		then
 			board[$compCounter]=$computerSymbol
 			checkForWin $computerSymbol $count
 			board[$compCounter]=$NULL
+
 		fi
 		((compCounter++))
+
+	done
+}
+
+function blockByRow()
+{
+	for (( rowCount=1; rowCount<=9; rowCount=rowCount+3 ))
+	do
+		if [[ ${board[$rowCount]} == ${board[$rowCount+1]} ]] && [[ ${board[$rowCount+1]} == $playerSymbol ]]
+		then
+			board[$rowCount+2]=$computerSymbol
+			flag=true
+		elif [[ ${board[$rowCount+1]} == ${board[$rowCount+2]} ]] && [[ ${board[$rowCount+2]} == $playerSymbol ]]
+		then
+			board[$rowCount]=$computerSymbol
+			flag=ture
+		elif [[ ${board[$rowCount+2]} == ${board[$rowCount]} ]] && [[ ${board[$rowCount]} == $playerSymbol ]]
+		then
+			board[$rowCount+1]=$computerSymbol
+			flag=ture
+		fi
+	done
+}
+
+function blockByCol()
+{
+	for (( colCount=1; colCount<=3; colCount++ ))
+	do
+		if [[ ${board[$colCount]} == ${board[$colCount+3]} ]] && [[ ${board[$colCount+3]} == $playerSymbol ]]
+		then
+			board[$colCount+6]=$computerSymbol 
+			flag=true
+		elif [[ ${board[$colCount+3]} == ${board[$colCount+6]} ]] && [[  ${board[$colCount+6]} == $playerSymbol ]]
+		then
+			board[$colCount]=$computerSymbol
+			flag=true
+		elif [[ ${board[$colCount+6]} == ${board[$colCount]} ]] && [[  ${board[$colCount]} == $playerSymbol ]]
+		then
+			board[$colCount+3]=$computerSymbol
+			flag=true
+
+		fi
+	done
+}
+
+function blockByDiagonal()
+{
+	for (( diaCount=1; diaCount<2; diaCount++))
+	do
+		if [[ ${board[$diaCount]} == ${board[$diaCount+4]} ]] && [[ ${board[$diaCount+4]} == $playerSymbol ]]
+		then
+			board[$diaCount+8]=$computerSymbol
+			flag=true
+		elif [[ ${board[$diaCount+4]} == ${board[$diaCount+8]} ]] && [[ ${board[$diaCount+8]} == $playerSymbol ]]
+		then
+			board[$diaCount]=$computerSymbol
+			flag=true
+		elif [[ ${board[$diaCount+8]} == ${board[$diaCount]} ]] && [[ ${board[$diaCount]} == $playerSymbol ]]
+		then
+			board[$diaCount]=$computerSymbol
+			flag=true
+		elif [[ ${board[$diaCount+2]} == ${board[$diaCount+4]} ]] && [[ ${board[$diaCount+4]} == $playerSymbol ]]
+		then
+			board[$diaCount+6]=$computerSymbol
+			flag=true
+		elif [[ ${board[$diaCount+4]} == ${board[$diaCount+6]} ]] && [[ ${board[$diaCount+6]} == $playerSymbol ]]
+		then
+			board[$diaCount+2]=$computerSymbol
+		elif [[ ${board[$diaCount+6]} == ${board[$diaCount+2]} ]] && [[ ${board[$diaCount+2]} == $playerSymbol ]]
+		then
+			board[$diaCount+4]=$computerSymbol
+			flag=true
+		fi
+
 	done
 
+}
+
+
+function playToBlockOppent()
+{
+	blockByRow
+	blockByCol
+	blockByDiagonal
 
 }
+
 
 function startPlaying()
 {
@@ -170,20 +258,28 @@ function startPlaying()
 					echo "check for empty cell"
 				fi
 		else
+			flag=false
 			displayBoard
 			echo "computers turn"
 			checkForCompMove
-			echo "Select cell for computer to insert symbol"
-			read  cellNumComp
-				if [ ${board[$cellNumComp]} == $NULL ]
-				then
-					board[$cellNumComp]=$computerSymbol
-					chanceOf="player"
-				else
-					echo "select empty cell"
-				fi
+			playToBlockOppent
+			if [ $flag == false ]
+			then
+				echo "Select cell for computer to insert symbol"
+				read cellNumComp
+					if [ ${board[$cellNumComp]} == $NULL ]
+					then
+						board[$cellNumComp]=$computerSymbol
+					else
+						echo "select empty cell"
+					fi
+			fi
+			chanceOf="player"
+
 		fi
 			((count++))
+			echo $count
+
 	done
 }
 
