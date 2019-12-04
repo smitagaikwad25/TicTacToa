@@ -14,6 +14,7 @@ flag=false
 
 
 
+
 function resetBoard()
 {
 	for (( index=1; index<=9; index++ ))
