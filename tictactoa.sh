@@ -178,7 +178,7 @@ function blockByCol()
 	do
 		if [[ ${board[$colCount]} == ${board[$colCount+3]} ]] && [[ ${board[$colCount+3]} == $playerSymbol ]]
 		then
-			board[$colCount+6]=$computerSymbol 
+			board[$colCount+6]=$computerSymbol
 			flag=true
 		elif [[ ${board[$colCount+3]} == ${board[$colCount+6]} ]] && [[  ${board[$colCount+6]} == $playerSymbol ]]
 		then
@@ -249,14 +249,14 @@ function startPlaying()
 			echo "Players turn"
 			echo "Select cell to insert your symbol"
 			read cellNum
-				if [ ${board[$cellNum]} == $NULL ]
-				then
-					board[$cellNum]=$playerSymbol
-					checkForWin $playerSymbol $count
-					chanceOf="computer"
-				else
-					echo "check for empty cell"
-				fi
+			if [ ${board[$cellNum]} == $NULL ]
+			then
+				board[$cellNum]=$playerSymbol
+				checkForWin $playerSymbol $count
+				chanceOf="computer"
+			else
+				echo "check for empty cell"
+			fi
 		else
 			flag=false
 			displayBoard
