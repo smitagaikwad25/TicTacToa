@@ -1,5 +1,6 @@
 #! /bin/bash
 echo "WelCome In Tictactoa Simulator"
+echo "WelCome In Tictactoa Simulator"
 
 declare -a board
 #constants
