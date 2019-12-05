@@ -224,24 +224,40 @@ function playToBlockOppent()
 
 function takeCorner()
 {
+
         local corner=1
-        if [ ${board[$corner]} == $NULL ]
-        then
-                board[$corner]=$computerSymbol
-                flag=true
-        elif [ ${board[$corner+3]} == $NULL ]
-        then
-                board[$corner+3]=$computerSymbol
-                flag=true
-        elif [ ${board[$corner+6]} == $NUll ]
-        then
-                board[$corner+6]=$computerSymbol
-                        flag=true
-        elif [ ${board[$corner+8]} == $NULL ]
-        then
-                board[$corner+8]=$computerSymbol
-                flag=true
-       	fi
+	if [[ ${board[corner]} == $NULL ]] || [[ ${board[$corner+2]} == $NULL ]] || [[ ${board[$corner+6]} == $NULL ]] || [[ ${board[$corner+8]} == $NULL ]]
+	then
+        	if [ ${board[$corner]} == $NULL ]
+        	then
+                	board[$corner]=$computerSymbol
+                	flag=true
+        	elif [ ${board[$corner+2]} == $NULL ]
+        	then
+                	board[$corner+2]=$computerSymbol
+                	flag=true
+        	elif [ ${board[$corner+6]} == $NULL ]
+        	then
+                	board[$corner+6]=$computerSymbol
+			flag=true
+        	elif [ ${board[$corner+8]} == $NULL ]
+        	then
+                	board[$corner+8]=$computerSymbol
+                	flag=true
+       		fi
+	else
+		takeCentre
+	fi
+}
+
+function takeCentre()
+{
+	local centre=1
+	if [ ${board[$centre+4]} == $NULL ]
+	then
+		board[$centre+4]=$computerSymbol
+		flag=true
+	fi
 }
 
 function startPlaying()
@@ -274,14 +290,12 @@ function startPlaying()
 			takeCorner
 			if [ $flag == false ]
 			then
-				echo "Select cell for computer to insert symbol"
-				read cellNumComp
-					if [ ${board[$cellNumComp]} == $NULL ]
-					then
-						board[$cellNumComp]=$computerSymbol
-					else
-						echo "select empty cell"
-					fi
+				echo "Selec Cell For Computer"
+				read cellComNum
+				if [ ${board[$cellComNum]} == $Null ]
+				then
+					board[$cellComNum]=$compSymbol
+				fi
 			fi
 			chanceOf="player"
 
