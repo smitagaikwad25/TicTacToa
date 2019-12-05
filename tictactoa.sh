@@ -1,7 +1,5 @@
 #! /bin/bash
 echo "WelCome In Tictactoa Simulator"
-echo "WelCome In Tictactoa Simulator"
-
 declare -a board
 #constants
 MAX_CELL_NUM=9
@@ -12,10 +10,6 @@ playerSymbol=0
 computerSymbol=0
 counter=0
 flag=false
-
-
-
-
 function resetBoard()
 {
 	for (( index=1; index<=9; index++ ))
@@ -108,6 +102,7 @@ function checkForCol()
 	do
 		if [[ ${board[$col]} == ${board[$col+3]} ]] && [[ ${board[$col+3]} == ${board[$col+6]} ]] && [[ ${board[$col+6]} == $symbolToCheck ]]
 		then
+FlipCoin  ideaIC-2019.2.4         SnakeAndLadder
 			displayBoard
 			echo "Game win"
 			exit
@@ -228,6 +223,26 @@ function blockByDiagonal()
 
 }
 
+function takeCorner()
+{	local corner=1
+	if [[ ${board[$corner] == "NULL" ]]
+	then
+		board[$corner]=$computerSymbol
+		flag=true
+	elif [[ ${board[corner+3] == "NULL" ]]
+	then
+		board[$corner+3]=$computerSymbol
+		flag=true
+	elif [[ ${board[corner+6]} == "NUll" ]]
+	then
+		board[$corner+6]=$computerSymbol
+			flag=true
+	elif [[ ${board[corner+8]} == "NULL" ]]
+	then
+		board[$corner+8]=$computerSymbol
+		flag=true
+	if
+}
 
 function playToBlockOppent()
 {
@@ -236,7 +251,6 @@ function playToBlockOppent()
 	blockByDiagonal
 
 }
-
 
 function startPlaying()
 {
@@ -264,7 +278,9 @@ function startPlaying()
 			displayBoard
 			echo "computers turn"
 			checkForCompMove
-			playToBlockOppent
+#			playToBlockOppent
+			takeCorner
+
 			if [ $flag == false ]
 			then
 				echo "Select cell for computer to insert symbol"
@@ -293,5 +309,4 @@ function main()
 	tossToCheckWhoPlaySFirst
 	startPlaying
 }
-
 main
