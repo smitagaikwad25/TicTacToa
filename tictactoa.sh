@@ -10,6 +10,7 @@ playerSymbol=0
 computerSymbol=0
 counter=0
 flag=false
+
 function resetBoard()
 {
 	for (( index=1; index<=9; index++ ))
@@ -102,7 +103,6 @@ function checkForCol()
 	do
 		if [[ ${board[$col]} == ${board[$col+3]} ]] && [[ ${board[$col+3]} == ${board[$col+6]} ]] && [[ ${board[$col+6]} == $symbolToCheck ]]
 		then
-FlipCoin  ideaIC-2019.2.4         SnakeAndLadder
 			displayBoard
 			echo "Game win"
 			exit
@@ -151,97 +151,67 @@ function checkForCompMove()
 
 function blockByRow()
 {
-	for (( rowCount=1; rowCount<=9; rowCount=rowCount+3 ))
-	do
-		if [[ ${board[$rowCount]} == ${board[$rowCount+1]} ]] && [[ ${board[$rowCount+1]} == $playerSymbol ]]
-		then
-			board[$rowCount+2]=$computerSymbol
-			flag=true
-		elif [[ ${board[$rowCount+1]} == ${board[$rowCount+2]} ]] && [[ ${board[$rowCount+2]} == $playerSymbol ]]
-		then
-			board[$rowCount]=$computerSymbol
-			flag=ture
-		elif [[ ${board[$rowCount+2]} == ${board[$rowCount]} ]] && [[ ${board[$rowCount]} == $playerSymbol ]]
-		then
-			board[$rowCount+1]=$computerSymbol
-			flag=ture
-		fi
-	done
+	if [[ ${board[$rowCount]} == ${board[$rowCount+1]} ]] && [[ ${board[$rowCount+1]} == $playerSymbol ]]
+	then
+		board[$rowCount+2]=$computerSymbol
+		flag=true
+	elif [[ ${board[$rowCount+1]} == ${board[$rowCount+2]} ]] && [[ ${board[$rowCount+2]} == $playerSymbol ]]
+	then
+		board[$rowCount]=$computerSymbol
+		flag=ture
+	elif [[ ${board[$rowCount+2]} == ${board[$rowCount]} ]] && [[ ${board[$rowCount]} == $playerSymbol ]]
+	then
+		board[$rowCount+1]=$computerSymbol
+		flag=ture
+	fi
 }
 
 function blockByCol()
 {
-	for (( colCount=1; colCount<=3; colCount++ ))
-	do
-		if [[ ${board[$colCount]} == ${board[$colCount+3]} ]] && [[ ${board[$colCount+3]} == $playerSymbol ]]
-		then
-			board[$colCount+6]=$computerSymbol
-			flag=true
-		elif [[ ${board[$colCount+3]} == ${board[$colCount+6]} ]] && [[  ${board[$colCount+6]} == $playerSymbol ]]
-		then
-			board[$colCount]=$computerSymbol
-			flag=true
-		elif [[ ${board[$colCount+6]} == ${board[$colCount]} ]] && [[  ${board[$colCount]} == $playerSymbol ]]
-		then
-			board[$colCount+3]=$computerSymbol
-			flag=true
+	if [[ ${board[$colCount]} == ${board[$colCount+3]} ]] && [[ ${board[$colCount+3]} == $playerSymbol ]]
+	then
+		board[$colCount+6]=$computerSymbol
+		flag=true
+	elif [[ ${board[$colCount+3]} == ${board[$colCount+6]} ]] && [[  ${board[$colCount+6]} == $playerSymbol ]]
+	then
+		board[$colCount]=$computerSymbol
+		flag=true
+	elif [[ ${board[$colCount+6]} == ${board[$colCount]} ]] && [[  ${board[$colCount]} == $playerSymbol ]]
+	then
+		board[$colCount+3]=$computerSymbol
+		flag=true
 
-		fi
-	done
+	fi
 }
 
 function blockByDiagonal()
 {
-	for (( diaCount=1; diaCount<2; diaCount++))
-	do
-		if [[ ${board[$diaCount]} == ${board[$diaCount+4]} ]] && [[ ${board[$diaCount+4]} == $playerSymbol ]]
-		then
-			board[$diaCount+8]=$computerSymbol
-			flag=true
-		elif [[ ${board[$diaCount+4]} == ${board[$diaCount+8]} ]] && [[ ${board[$diaCount+8]} == $playerSymbol ]]
-		then
-			board[$diaCount]=$computerSymbol
-			flag=true
-		elif [[ ${board[$diaCount+8]} == ${board[$diaCount]} ]] && [[ ${board[$diaCount]} == $playerSymbol ]]
-		then
-			board[$diaCount]=$computerSymbol
-			flag=true
-		elif [[ ${board[$diaCount+2]} == ${board[$diaCount+4]} ]] && [[ ${board[$diaCount+4]} == $playerSymbol ]]
-		then
-			board[$diaCount+6]=$computerSymbol
-			flag=true
-		elif [[ ${board[$diaCount+4]} == ${board[$diaCount+6]} ]] && [[ ${board[$diaCount+6]} == $playerSymbol ]]
-		then
-			board[$diaCount+2]=$computerSymbol
-		elif [[ ${board[$diaCount+6]} == ${board[$diaCount+2]} ]] && [[ ${board[$diaCount+2]} == $playerSymbol ]]
-		then
-			board[$diaCount+4]=$computerSymbol
-			flag=true
-		fi
-
-	done
-
-}
-
-function takeCorner()
-{	local corner=1
-	if [[ ${board[$corner] == "NULL" ]]
+	local diaCount=1
+	if [[ ${board[$diaCount]} == ${board[$diaCount+4]} ]] && [[ ${board[$diaCount+4]} == $playerSymbol ]]
 	then
-		board[$corner]=$computerSymbol
+		board[$diaCount+8]=$computerSymbol
 		flag=true
-	elif [[ ${board[corner+3] == "NULL" ]]
+	elif [[ ${board[$diaCount+4]} == ${board[$diaCount+8]} ]] && [[ ${board[$diaCount+8]} == $playerSymbol ]]
 	then
-		board[$corner+3]=$computerSymbol
+		board[$diaCount]=$computerSymbol
 		flag=true
-	elif [[ ${board[corner+6]} == "NUll" ]]
+	elif [[ ${board[$diaCount+8]} == ${board[$diaCount]} ]] && [[ ${board[$diaCount]} == $playerSymbol ]]
 	then
-		board[$corner+6]=$computerSymbol
-			flag=true
-	elif [[ ${board[corner+8]} == "NULL" ]]
-	then
-		board[$corner+8]=$computerSymbol
+		board[$diaCount]=$computerSymbol
 		flag=true
-	if
+	elif [[ ${board[$diaCount+2]} == ${board[$diaCount+4]} ]] && [[ ${board[$diaCount+4]} == $playerSymbol ]]
+	then
+		board[$diaCount+6]=$computerSymbol
+		flag=true
+	elif [[ ${board[$diaCount+4]} == ${board[$diaCount+6]} ]] && [[ ${board[$diaCount+6]} == $playerSymbol ]]
+	then
+		board[$diaCount+2]=$computerSymbol
+	elif [[ ${board[$diaCount+6]} == ${board[$diaCount+2]} ]] && [[ ${board[$diaCount+2]} == $playerSymbol ]]
+	then
+		board[$diaCount+4]=$computerSymbol
+		flag=true
+	fi
+
 }
 
 function playToBlockOppent()
@@ -250,6 +220,28 @@ function playToBlockOppent()
 	blockByCol
 	blockByDiagonal
 
+}
+
+function takeCorner()
+{
+        local corner=1
+        if [ ${board[$corner]} == $NULL ]
+        then
+                board[$corner]=$computerSymbol
+                flag=true
+        elif [ ${board[$corner+3]} == $NULL ]
+        then
+                board[$corner+3]=$computerSymbol
+                flag=true
+        elif [ ${board[$corner+6]} == $NUll ]
+        then
+                board[$corner+6]=$computerSymbol
+                        flag=true
+        elif [ ${board[$corner+8]} == $NULL ]
+        then
+                board[$corner+8]=$computerSymbol
+                flag=true
+       	fi
 }
 
 function startPlaying()
@@ -278,9 +270,8 @@ function startPlaying()
 			displayBoard
 			echo "computers turn"
 			checkForCompMove
-#			playToBlockOppent
+			playToBlockOppent
 			takeCorner
-
 			if [ $flag == false ]
 			then
 				echo "Select cell for computer to insert symbol"
