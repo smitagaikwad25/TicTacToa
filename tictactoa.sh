@@ -245,9 +245,13 @@ function takeCorner()
                 	board[$corner+8]=$computerSymbol
                 	flag=true
        		fi
-	else
+	elif [ ${board[$corner+4]} == $Null ]
+	then
 		takeCentre
+	else
+		takeSide
 	fi
+
 }
 
 function takeCentre()
@@ -257,6 +261,24 @@ function takeCentre()
 	then
 		board[$centre+4]=$computerSymbol
 		flag=true
+	fi
+}
+
+function takeSide()
+{
+	local side=1
+	if [ ${board[$side+1]} == $NULL ]
+	then
+		board[$side+1]=$compSymbol
+	elif [ ${board[$side+3]} == $NULL ]
+	then
+		board[$side+3]=$compSymbol
+	elif [ ${board[$side+5]} == $NULL ]
+	then
+		board[$side+5]=$compSymbol
+	elif [ ${board[$side+7]} == $Null ]
+	then
+		board[$side+7]=$compSymbol
 	fi
 }
 
@@ -301,7 +323,6 @@ function startPlaying()
 
 		fi
 			((count++))
-			echo $count
 
 	done
 }
