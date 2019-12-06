@@ -28,7 +28,7 @@ function assignLetterXOrO()
                 playerSymbol=X
                 computerSymbol=O
                 echo "player:"
-		echo  $playerSymbol 
+		echo  $playerSymbol
                 echo "computer:"
 		echo  $computerSymbol
         else
@@ -110,8 +110,8 @@ function checkForCol()
 
 function checkForTie()
 {
-	local Count=$1
-	if [ $Count -eq $MAX_CELL_NUM ]
+	local Counter=$1
+	if [ $Counter -eq $MAX_CELL_NUM ]
 	then
 		echo "game is tie"
 		exit
@@ -126,23 +126,6 @@ function checkForWin()
 	checkForCol $symbolToCheck
 	checkForDiagonal $symbolToCheck
 	checkForTie $Count
-}
-
-function checkForCompMove()
-{
-	local compCounter=1
-	while [ $compCounter -le $MAX_CELL_NUM ]
-	do
- 		if [ ${board[$compCounter]} == $NULL ]
-		then
-			board[$compCounter]=$computerSymbol
-			checkForWin $computerSymbol $counter
-			board[$compCounter]=$NULL
-
-		fi
-		((compCounter++))
-
-	done
 }
 
 function blockByRow()
@@ -202,6 +185,7 @@ function blockByDiagonal()
 	elif [[ ${board[$diaCount+4]} == ${board[$diaCount+6]} ]] && [[ ${board[$diaCount+6]} == $playerSymbol ]]
 	then
 		board[$diaCount+2]=$computerSymbol
+		flag=true
 	elif [[ ${board[$diaCount+6]} == ${board[$diaCount+2]} ]] && [[ ${board[$diaCount+2]} == $playerSymbol ]]
 	then
 		board[$diaCount+4]=$computerSymbol
@@ -296,7 +280,7 @@ function startPlaying()
 			flag=false
 			displayBoard
 			echo "computers turn"
-			checkForCompMove
+			checkForWin $computerSymbol $counter 
 			playToBlockOppent
 			takeCorner
 			takeCentre
@@ -327,3 +311,4 @@ function main()
 	startPlaying
 }
 main
+
