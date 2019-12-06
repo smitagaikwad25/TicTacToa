@@ -69,12 +69,10 @@ function checkForDiagonal()
 	do
 		if [[ ${board[$diag]} == ${board[$diag+4]} ]] && [[ ${board[$diag+4]} == ${board[$diag+8]} ]] && [[ ${board[$diag+8]} == $symbolToCheck ]]
 		then
-			displayBoard
 			echo "Game Win"
 			exit
 		elif [[ ${board[$diag+2]} == ${board[$diag+4]} ]] && [[ ${board[$diag+4]} == ${board[$diag+6]} ]] && [[ ${board[$diag+6]} == $symbolToCheck ]]
 		then
-			displayBoard
 			echo "Game Win"
 			exit
 		fi
@@ -88,7 +86,6 @@ function checkForRow()
 	do
 		if [[ ${board[$row]} == ${board[$row+1]} ]] && [[ ${board[$row+1]} == ${board[$row+2]} ]] && [[ ${board[$row+2]} == $symbolToCheck ]]	
 		then
-			displayBoard
 			echo "Game Win"
 			exit
 		fi
@@ -103,7 +100,6 @@ function checkForCol()
 	do
 		if [[ ${board[$col]} == ${board[$col+3]} ]] && [[ ${board[$col+3]} == ${board[$col+6]} ]] && [[ ${board[$col+6]} == $symbolToCheck ]]
 		then
-			displayBoard
 			echo "Game win"
 			exit
 		fi
@@ -284,7 +280,7 @@ function takeSide()
 
 function startPlaying()
 {
-	local count=0
+	local counter=0
 	local i=1
 	local min=0
 	while [[ $i -ge $min && $i -le $MAX_CELL_NUM ]]
@@ -298,7 +294,7 @@ function startPlaying()
 			if [ ${board[$cellNum]} == $NULL ]
 			then
 				board[$cellNum]=$playerSymbol
-				checkForWin $playerSymbol $count
+				checkForWin $playerSymbol $counter
 				chanceOf="computer"
 			else
 				echo "check for empty cell"
@@ -322,7 +318,7 @@ function startPlaying()
 			chanceOf="player"
 
 		fi
-			((count++))
+			((counter++))
 
 	done
 }
