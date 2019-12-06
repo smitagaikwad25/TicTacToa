@@ -121,7 +121,7 @@ function checkForTie()
 function checkForWin()
 {
 	local symbolToCheck=$1
-	local Count=$2
+	local Counter=$2
 	checkForRow $symbolToCheck
 	checkForCol $symbolToCheck
 	checkForDiagonal $symbolToCheck
@@ -136,7 +136,7 @@ function checkForCompMove()
  		if [ ${board[$compCounter]} == $NULL ]
 		then
 			board[$compCounter]=$computerSymbol
-			checkForWin $computerSymbol $count
+			checkForWin $computerSymbol $counter
 			board[$compCounter]=$NULL
 
 		fi
