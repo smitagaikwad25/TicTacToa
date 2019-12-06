@@ -220,34 +220,23 @@ function playToBlockOppent()
 
 function takeCorner()
 {
-
-        local corner=1
-	if [[ ${board[corner]} == $NULL ]] || [[ ${board[$corner+2]} == $NULL ]] || [[ ${board[$corner+6]} == $NULL ]] || [[ ${board[$corner+8]} == $NULL ]]
+	if [ ${board[$corner]} == $NULL ]
 	then
-        	if [ ${board[$corner]} == $NULL ]
-        	then
-                	board[$corner]=$computerSymbol
-                	flag=true
-        	elif [ ${board[$corner+2]} == $NULL ]
-        	then
-                	board[$corner+2]=$computerSymbol
-                	flag=true
-        	elif [ ${board[$corner+6]} == $NULL ]
-        	then
-                	board[$corner+6]=$computerSymbol
-			flag=true
-        	elif [ ${board[$corner+8]} == $NULL ]
-        	then
-                	board[$corner+8]=$computerSymbol
-                	flag=true
-       		fi
-	elif [ ${board[$corner+4]} == $Null ]
+		board[$corner]=$computerSymbol
+		flag=true
+	elif [ ${board[$corner+2]} == $NULL ]
 	then
-		takeCentre
-	else
-		takeSide
+		board[$corner+2]=$computerSymbol
+		flag=true
+	elif [ ${board[$corner+6]} == $NULL ]
+	then
+		board[$corner+6]=$computerSymbol
+		flag=true
+	elif [ ${board[$corner+8]} == $NULL ]
+        then
+		board[$corner+8]=$computerSymbol
+		flag=true
 	fi
-
 }
 
 function takeCentre()
@@ -266,15 +255,19 @@ function takeSide()
 	if [ ${board[$side+1]} == $NULL ]
 	then
 		board[$side+1]=$compSymbol
+		flag=true
 	elif [ ${board[$side+3]} == $NULL ]
 	then
 		board[$side+3]=$compSymbol
+		flag=true
 	elif [ ${board[$side+5]} == $NULL ]
 	then
 		board[$side+5]=$compSymbol
+		flag=true
 	elif [ ${board[$side+7]} == $Null ]
 	then
 		board[$side+7]=$compSymbol
+		flag=true
 	fi
 }
 
@@ -306,9 +299,11 @@ function startPlaying()
 			checkForCompMove
 			playToBlockOppent
 			takeCorner
+			takeCentre
+			takeSide
 			if [ $flag == false ]
 			then
-				echo "Selec Cell For Computer"
+				echo "Select Cell For Computer"
 				read cellComNum
 				if [ ${board[$cellComNum]} == $Null ]
 				then
